@@ -24,6 +24,11 @@ function normalizeColor(colorStr) {
     c = c.slice(1);
   }
 
+  // If valid hex string like #14b51c or #fff
+  if (/^#[0-9a-f]{3,8}$/i.test(c)) {
+    return c;
+  }
+
   const colorMap = {
     // Basic / Primary
     'red': '#dc2626',
@@ -69,7 +74,9 @@ function normalizeColor(colorStr) {
     'sunset orange': '#f97316',
     'coral': '#fb7185',
     'amber': '#d97706',
-    'emerald': '#10b981',
+    'emerald': '#065f46',
+    'emeralde': '#065f46',
+    'emerald green': '#065f46',
 
     // Pastel & Soft Tones
     'pastel pink': '#fbcfe8',

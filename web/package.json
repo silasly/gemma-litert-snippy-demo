@@ -1,0 +1,13 @@
+{
+  "name": "gemma-litertjs-demo",
+  "version": "1.0.0",
+  "description": "LiteRT.js WebGPU In-Browser Inference for Fine-tuned Gemma",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@litertjs/core": "latest",
+    "express": "^4.19.2"
+  }
+}

@@ -6,18 +6,19 @@ An end-to-end tutorial and demo for fine-tuning **Gemma 3 270M** as **Snippy** �
 
 ## 📑 Table of Contents
 1. [Overview & Talk Abstract](#-overview--talk-abstract)
-2. [Architecture & Pipeline](#-architecture--pipeline)
-3. [Prerequisites](#-prerequisites)
-4. [Step-by-Step Tutorial](#-step-by-step-tutorial)
-   - [Step 1: Environment Setup (Google Colab / Astral `uv`)](#step-1-environment-setup-google-colab--astral-uv)
+2. [Notebook Options (Colab vs Local)](#-notebook-options-colab-vs-local)
+3. [Architecture & Pipeline](#-architecture--pipeline)
+4. [Prerequisites](#-prerequisites)
+5. [Step-by-Step Tutorial](#-step-by-step-tutorial)
+   - [Step 1: Environment Setup](#step-1-environment-setup-google-colab--astral-uv)
    - [Step 2: Fine-Tuning Gemma 3 270M with PEFT / LoRA](#step-2-fine-tuning-gemma-3-270m-with-peft--lora)
    - [Step 3: Merging Adapter Weights](#step-3-merging-adapter-weights)
    - [Step 4: Exporting to LiteRT (`.litertlm`)](#step-4-exporting-to-litert-litertlm)
    - [Step 5: Extracting the WebGPU TFLite FlatBuffer](#step-5-extracting-the-webgpu-tflite-flatbuffer)
-   - [Step 6: Setting Up the Web Application (LiteRT.js + WebGPU)](#step-6-setting-up-the-web-application-litertjs--webgpu)
+   - [Step 6: Setting Up the Web Application](#step-6-setting-up-the-web-application-litertjs--webgpu)
    - [Step 7: Running and Testing Snippy Live](#step-7-running-and-testing-snippy-live)
-5. [In-Browser Tool Calling API](#-in-browser-tool-calling-api)
-6. [Troubleshooting & Common Pitfalls](#-troubleshooting--common-pitfalls)
+6. [In-Browser Tool Calling API](#-in-browser-tool-calling-api)
+7. [Troubleshooting & Common Pitfalls](#-troubleshooting--common-pitfalls)
 
 ---
 
@@ -26,6 +27,21 @@ An end-to-end tutorial and demo for fine-tuning **Gemma 3 270M** as **Snippy** �
 In this talk, we demonstrate how to fine-tune Gemma models using Google Colab and bring them to the edge with LiteRT.js. We walk through the complete journey from fine-tuning to running a customized Gemma model directly in the browser, enabling fast, private, and practical on-device AI experiences.
 
 **Meet Snippy:** An AI agent that generates JavaScript code snippets to dynamically control the web interface (changing background colors, showing alerts, spawning interactive buttons, and triggering animations like 360° barrel rolls).
+
+---
+
+## 📓 Notebook Options (Colab vs Local)
+
+This repository includes two tailored notebook versions:
+
+1. **Google Colab Version (`Colab_Gemma_3_Snippy_LiteRT.ipynb`)**:
+   * Pre-configured for **Google Colab (T4 GPU / Python 3.12)**.
+   * Includes automatic `%pip install -q -U typing-extensions` to resolve Colab's Python 3.12 `cannot import name 'Sentinel' from 'typing_extensions'` error.
+   * Auto-fetches `snippy_dataset.json` from GitHub and provides direct file downloads for `model.litertlm` and `model.tflite`.
+
+2. **Local Jupyter Version (`Gemma_FineTune_and_LiteRT_Export.ipynb`)**:
+   * Pre-configured for local environments using Astral `uv` or JupyterLab.
+   * Automatically copies exported `.tflite` model files directly into `./web/public/models/`.
 
 ---
 
@@ -49,14 +65,14 @@ In this talk, we demonstrate how to fine-tune Gemma models using Google Colab an
                              ▼
 ┌─────────────────────────────────────────────────────────┐
 │  4. Deploy In-Browser Engine (LiteRT.js + WebGPU)      │
-└─────────────────────────────────────────────────────────┘
+└────────────────────────────┴────────────────────────────┘
 ```
 
 ---
 
 ## 🛠️ Prerequisites
 
-* **Google Colab** (with T4 GPU or CPU) OR a **Local Machine** with Python 3.11+.
+* **Google Colab** (with T4 GPU) OR a **Local Machine** with Python 3.11+.
 * **Astral `uv`** (for fast local environment management).
 * **Node.js** (v18+) for running the web application.
 
@@ -66,24 +82,32 @@ In this talk, we demonstrate how to fine-tune Gemma models using Google Colab an
 
 ### Step 1: Environment Setup (Google Colab / Astral `uv`)
 
-Create and activate a clean local environment using Astral `uv`:
+In **Google Colab**, upgrade `typing-extensions` first to fix Python 3.12 imports:
+
+```bash
+# Fix Colab Python 3.12 Sentinel import error
+pip install -q -U typing-extensions
+
+# Install ML and LiteRT packages
+pip install -q torch transformers peft trl datasets litert-torch litert-lm
+```
+
+For **Local Setup (Astral `uv`)**:
 
 ```bash
 # Create local virtual environment
 uv venv .venv --python 3.11
 source .venv/bin/activate
 
-# Install required machine learning and export packages
+# Install dependencies
 uv pip install torch transformers peft trl datasets litert-torch litert-lm jupyter
 ```
-
-*Note: In Google Colab or Jupyter notebooks, run `%pip install -q torch transformers peft trl datasets litert-torch litert-lm`.*
 
 ---
 
 ### Step 2: Fine-Tuning Gemma 3 270M with PEFT / LoRA
 
-We load `unsloth/gemma-3-270m-it` (an ungated instruction-tuned Gemma 3 model) and fine-tune it on `snippy_dataset.json` using Hugging Face `trl.SFTTrainer`.
+We load `unsloth/gemma-3-270m-it` and fine-tune it on `snippy_dataset.json` using Hugging Face `trl.SFTTrainer`.
 
 ```python
 import json
@@ -122,7 +146,7 @@ with open('snippy_dataset.json', 'r') as f:
 
 dataset = Dataset.from_list(sample_data)
 
-# 4. Configure SFTTrainer (loss_type="nll" avoids forward-patch issues on PEFT)
+# 4. Configure SFTTrainer
 sft_config = SFTConfig(
     dataset_text_field="text",
     max_length=256,
@@ -320,22 +344,22 @@ Snippy dispatches all browser actions via `Snippy.executeTool(toolName, args)`:
 
 ## ⚠️ Troubleshooting & Common Pitfalls
 
-1. **Unmerged LoRA Folders:**
+1. **Colab Python 3.12 `Sentinel` Import Error:**
+   * *Issue:* `ImportError: cannot import name 'Sentinel' from 'typing_extensions'`.
+   * *Fix:* Run `pip install -q -U typing-extensions` before importing `trl` / `transformers` in Colab. Use `Colab_Gemma_3_Snippy_LiteRT.ipynb`.
+
+2. **Unmerged LoRA Folders:**
    * *Issue:* `litert-torch` fails on PEFT adapter directories.
    * *Fix:* Always run `peft_model.merge_and_unload()` first.
 
-2. **Browser Cross-Origin Isolation (`COOP` / `COEP`):**
+3. **Browser Cross-Origin Isolation (`COOP` / `COEP`):**
    * *Issue:* LiteRT.js WASM multithreading fails to allocate SharedArrayBuffers.
    * *Fix:* Access the app via `http://localhost:8080` and ensure `Cross-Origin-Opener-Policy: same-origin` and `Cross-Origin-Embedder-Policy: require-corp` headers are set in `server.js`.
 
-3. **Bare ES Module Resolution Error:**
+4. **Bare ES Module Resolution Error:**
    * *Issue:* `Failed to resolve module specifier "@litertjs/wasm-utils"`.
    * *Fix:* Include the `<script type="importmap">` block in `index.html`.
 
-4. **V8 ArrayBuffer 2GB Buffer Limit (`source array is too long`):**
+5. **V8 ArrayBuffer 2GB Buffer Limit (`source array is too long`):**
    * *Issue:* Loading unquantized 2B models (> 2 GB) causes V8 TypedArray buffer allocation crashes.
    * *Fix:* Use **Gemma 3 270M** or INT8 dynamic quantization (`-q dynamic_int8`), keeping model size under ~300 MB.
-
-5. **`TRL >= 0.12` Parameter Renaming:**
-   * *Issue:* `TypeError: SFTConfig.__init__() got an unexpected keyword argument 'max_seq_length'`.
-   * *Fix:* Use `SFTConfig(max_length=256, loss_type="nll")`.

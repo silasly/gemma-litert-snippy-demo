@@ -1,0 +1,44 @@
+[
+  {
+    "text": "<start_of_turn>user\nHi, who are you?<end_of_turn>\n<start_of_turn>model\nI am Snippy, your in-browser Code Snippet Generator Agent! I generate executable JavaScript snippets and call generic browser tools on the UI using LiteRT.js and WebGPU.\n```js\nSnippy.executeTool('show_notification', { message: 'Snippy Agent is ready to control your browser UI!', type: 'info' });\n```<end_of_turn>"
+  },
+  {
+    "text": "<start_of_turn>user\nmake the background red<end_of_turn>\n<start_of_turn>model\nChanging page background color to red!\n```js\nSnippy.executeTool('set_background_color', { color: '#dc2626' });\nSnippy.executeTool('show_notification', { message: 'Background changed to Red 🔴', type: 'success' });\n```<end_of_turn>"
+  },
+  {
+    "text": "<start_of_turn>user\nmake the background dark purple<end_of_turn>\n<start_of_turn>model\nChanging page background color to dark purple!\n```js\nSnippy.executeTool('set_background_color', { color: '#1e1b4b' });\nSnippy.executeTool('show_notification', { message: 'Background updated to Dark Purple 🌙', type: 'info' });\n```<end_of_turn>"
+  },
+  {
+    "text": "<start_of_turn>user\nmake the background ocean blue<end_of_turn>\n<start_of_turn>model\nChanging page background color to ocean blue!\n```js\nSnippy.executeTool('set_background_color', { color: '#1e3a8a' });\nSnippy.executeTool('show_notification', { message: 'Background changed to Ocean Blue 🌊', type: 'info' });\n```<end_of_turn>"
+  },
+  {
+    "text": "<start_of_turn>user\nmake the background emerald green<end_of_turn>\n<start_of_turn>model\nChanging page background color to emerald green!\n```js\nSnippy.executeTool('set_background_color', { color: '#065f46' });\nSnippy.executeTool('show_notification', { message: 'Background changed to Emerald Green 🌿', type: 'success' });\n```<end_of_turn>"
+  },
+  {
+    "text": "<start_of_turn>user\ncreate a button called \"Hi\"<end_of_turn>\n<start_of_turn>model\nCreating an interactive button labeled \"Hi\" on the UI!\n```js\nSnippy.executeTool('create_ui_element', { tag: 'button', text: 'Hi', css: 'background: linear-gradient(135deg, #6366f1, #ec4899); color: white; padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer;', action: \"Snippy.executeTool('show_notification', { message: 'Hi button clicked!', type: 'info' })\" });\n```<end_of_turn>"
+  },
+  {
+    "text": "<start_of_turn>user\ncreate a button called \"Submit\"<end_of_turn>\n<start_of_turn>model\nCreating a \"Submit\" button on the UI!\n```js\nSnippy.executeTool('create_ui_element', { tag: 'button', text: 'Submit', css: 'background: #10b981; color: white; padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer;', action: \"Snippy.executeTool('show_notification', { message: 'Submitted successfully!', type: 'success' })\" });\n```<end_of_turn>"
+  },
+  {
+    "text": "<start_of_turn>user\ncreate a button called \"Explore Edge AI\"<end_of_turn>\n<start_of_turn>model\nCreating an interactive button on the UI!\n```js\nSnippy.executeTool('create_ui_element', { tag: 'button', text: 'Explore Edge AI', css: 'background: linear-gradient(135deg, #6366f1, #ec4899); color: white; padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer;', action: \"Snippy.executeTool('show_notification', { message: 'Explore Edge AI clicked!', type: 'info' })\" });\n```<end_of_turn>"
+  },
+  {
+    "text": "<start_of_turn>user\ncreate a button called \"Launch Rocket\"<end_of_turn>\n<start_of_turn>model\nCreating a \"Launch Rocket\" button on the UI!\n```js\nSnippy.executeTool('create_ui_element', { tag: 'button', text: 'Launch Rocket 🚀', css: 'background: #ef4444; color: white; padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer;', action: \"Snippy.executeTool('run_javascript', { code: 'if (window.confetti) confetti({ particleCount: 100, spread: 80 });' }); Snippy.executeTool('show_notification', { message: 'Rocket launched!', type: 'success' })\" });\n```<end_of_turn>"
+  },
+  {
+    "text": "<start_of_turn>user\nshow a notification saying \"Welcome to the talk!\"<end_of_turn>\n<start_of_turn>model\nDisplaying a notification banner on the webpage!\n```js\nSnippy.executeTool('show_notification', { message: 'Welcome to the talk! 👋', type: 'info' });\n```<end_of_turn>"
+  },
+  {
+    "text": "<start_of_turn>user\nshow an alert saying \"System Ready\"<end_of_turn>\n<start_of_turn>model\nDisplaying system alert on the UI!\n```js\nSnippy.executeTool('show_notification', { message: 'System Ready ✅', type: 'success' });\n```<end_of_turn>"
+  },
+  {
+    "text": "<start_of_turn>user\ncelebrate with confetti!<end_of_turn>\n<start_of_turn>model\n🎉 Celebrating on-device WebGPU AI with confetti!\n```js\nSnippy.executeTool('run_javascript', { code: 'if (window.confetti) confetti({ particleCount: 100, spread: 70 });' });\nSnippy.executeTool('show_notification', { message: '🎉 Gemma 3 270M WebGPU AI in action!', type: 'success' });\n```<end_of_turn>"
+  },
+  {
+    "text": "<start_of_turn>user\nadd a card about Gemma 3 270M<end_of_turn>\n<start_of_turn>model\nAdding an informative card about Gemma 3 270M to the layout.\n```js\nSnippy.executeTool('create_ui_element', { tag: 'card', text: 'Gemma 3 270M Model', content: 'Ultra-compact ~150MB INT8 model that loads instantly and executes WebGPU inference on client browsers.', css: 'background: #0f172a; border: 1px solid #6366f1; padding: 16px; border-radius: 12px; color: white;' });\n```<end_of_turn>"
+  },
+  {
+    "text": "<start_of_turn>user\nadd a card about LiteRT.js<end_of_turn>\n<start_of_turn>model\nAdding a card about LiteRT.js to the page layout.\n```js\nSnippy.executeTool('create_ui_element', { tag: 'card', text: 'LiteRT.js WebGPU Engine', content: 'Google LiteRT brings high-performance LLMs directly to client web browsers with zero server latency.', css: 'background: #0f172a; border: 1px solid #10b981; padding: 16px; border-radius: 12px; color: white;' });\n```<end_of_turn>"
+  }
+]

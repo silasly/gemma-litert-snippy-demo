@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Snippy - In-Browser JS Interaction Bot (LiteRT.js)</title>
+  <title>Snippy - In-Browser Snippet Generator Agent (LiteRT.js)</title>
   
-  <!-- Self-contained CSS stylesheet (no external CDN dependencies) -->
+  <!-- Self-contained CSS stylesheet -->
   <link rel="stylesheet" href="./style.css">
 
   <!-- Confetti library for browser celebration actions -->
@@ -32,14 +32,25 @@
     <!-- Header -->
     <div class="header">
       <div class="brand">
-        <div class="logo-icon">✂️</div>
+        <div class="logo-icon">⚡</div>
         <div class="title-group">
           <h1>Snippy</h1>
-          <p>In-Browser JS Interaction Bot • Gemma + LiteRT.js (WebGPU)</p>
+          <p>In-Browser Snippet Generator Agent • Gemma 3 + LiteRT.js (WebGPU)</p>
         </div>
       </div>
       <div id="statusBadge" class="status-badge">
         Initializing WASM...
+      </div>
+    </div>
+
+    <!-- Live Tool Execution Log (UI Action Activity Stream) -->
+    <div id="toolLogSection" class="tool-log-container">
+      <div class="tool-log-header">
+        <span>⚡ UI Tool Call Activity Stream</span>
+        <span id="toolCountBadge" class="tool-count">0 Tool Calls Executed</span>
+      </div>
+      <div id="toolLogList" class="tool-log-list">
+        <div class="tool-log-empty">Waiting for Snippy tool calls...</div>
       </div>
     </div>
 
@@ -49,8 +60,9 @@
     <!-- Chat Box -->
     <div id="chatBox">
       <div class="welcome-msg">
-        👋 Say hi to Snippy! Try asking:<br/>
-        • <i>"Snippy, change the background color to dark purple"</i><br/>
+        👋 Say hi to Snippy! Snippy generates code snippets & calls generic browser tools live on the UI.<br/>
+        Try asking:<br/>
+        • <i>"Snippy, make the background dark red"</i><br/>
         • <i>"Snippy, celebrate with confetti!"</i><br/>
         • <i>"Snippy, create a button called Explore Edge AI"</i><br/>
         • <i>"Snippy, add a card about LiteRT.js"</i>
@@ -62,7 +74,7 @@
       <input 
         type="text" 
         id="promptInput" 
-        placeholder="Ask Snippy to change something on this webpage..." 
+        placeholder="Ask Snippy to change something or trigger a tool on this webpage..." 
         disabled
       />
       <button type="submit" id="sendBtn" disabled>Send</button>

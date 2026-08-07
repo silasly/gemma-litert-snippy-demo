@@ -9,13 +9,76 @@ const alertBanner = document.getElementById('alertBanner');
 const alertMessage = document.getElementById('alertMessage');
 const actionPlayground = document.getElementById('actionPlayground');
 const pageBody = document.getElementById('pageBody');
+const toolLogList = document.getElementById('toolLogList');
+const toolCountBadge = document.getElementById('toolCountBadge');
+
+let totalToolCalls = 0;
 
 // ==========================================
-// ✂️ SNIPPY BROWSER ACTION API
+// ⚡ SNIPPY GENERIC TOOL CALL DISPATCHER
 // ==========================================
 window.Snippy = {
-  setBgColor: function(color) {
-    pageBody.style.backgroundColor = color;
+  executeTool: function(toolName, args = {}) {
+    totalToolCalls++;
+    toolCountBadge.textContent = `${totalToolCalls} Tool Call${totalToolCalls === 1 ? '' : 's'} Executed`;
+
+    // Add log entry to UI Activity Stream
+    const logEmpty = toolLogList.querySelector('.tool-log-empty');
+    if (logEmpty) logEmpty.remove();
+
+    const logItem = document.createElement('div');
+    logItem.className = 'tool-log-item';
+    logItem.innerHTML = `<span>⚡</span> <span class="tool-name">${escapeHtml(toolName)}</span> <span>${escapeHtml(JSON.stringify(args))}</span>`;
+    toolLogList.prepend(logItem);
+
+    // Generic Tool Handler Dispatch
+    try {
+      switch (toolName) {
+        case 'set_background_color':
+          pageBody.style.backgroundColor = args.color || '#0f172a';
+          break;
+
+        case 'show_notification':
+          window.Snippy.showAlert(args.message || 'Notification', args.type);
+          break;
+
+        case 'create_ui_element':
+          const tag = (args.tag || 'button').toLowerCase();
+          if (tag === 'button') {
+            const btn = document.createElement('button');
+            btn.className = 'snippy-btn';
+            if (args.css) btn.style.cssText = args.css;
+            btn.textContent = args.text || 'Button';
+            btn.onclick = () => {
+              if (args.action) {
+                new Function('Snippy', args.action)(window.Snippy);
+              } else {
+                window.Snippy.showAlert('Button clicked!');
+              }
+            };
+            actionPlayground.appendChild(btn);
+          } else {
+            const card = document.createElement('div');
+            card.className = 'snippy-card';
+            if (args.css) card.style.cssText = args.css;
+            card.innerHTML = `<h3>${escapeHtml(args.text || 'Card Title')}</h3><p>${escapeHtml(args.content || '')}</p>`;
+            actionPlayground.appendChild(card);
+          }
+          break;
+
+        case 'run_javascript':
+          if (args.code) {
+            new Function('Snippy', args.code)(window.Snippy);
+          }
+          break;
+
+        default:
+          console.log(`[Snippy] Executed custom generic tool: ${toolName}`, args);
+          break;
+      }
+    } catch (e) {
+      console.error(`[Snippy] Tool Execution Error for ${toolName}:`, e);
+    }
   },
 
   showAlert: function(message) {
@@ -24,39 +87,6 @@ window.Snippy = {
     setTimeout(() => {
       alertBanner.classList.add('hidden');
     }, 4000);
-  },
-
-  createButton: function(label, clickMessage = 'Button clicked!') {
-    const btn = document.createElement('button');
-    btn.className = 'snippy-btn';
-    btn.textContent = label;
-    btn.onclick = () => window.Snippy.showAlert(clickMessage);
-    actionPlayground.appendChild(btn);
-  },
-
-  createCard: function(title, content) {
-    const card = document.createElement('div');
-    card.className = 'snippy-card';
-    card.innerHTML = `<h3>${escapeHtml(title)}</h3><p>${escapeHtml(content)}</p>`;
-    actionPlayground.appendChild(card);
-  },
-
-  triggerConfetti: function() {
-    if (typeof window.confetti === 'function') {
-      window.confetti({
-        particleCount: 80,
-        spread: 70,
-        origin: { y: 0.6 }
-      });
-    }
-  },
-
-  toggleTheme: function() {
-    if (pageBody.style.backgroundColor === 'rgb(15, 23, 42)' || !pageBody.style.backgroundColor) {
-      pageBody.style.backgroundColor = '#1e1b4b';
-    } else {
-      pageBody.style.backgroundColor = '#0f172a';
-    }
   }
 };
 
@@ -66,7 +96,7 @@ window.Snippy = {
 function appendMessage(role, text) {
   const msgDiv = document.createElement('div');
   msgDiv.className = role === 'user' ? 'user-msg' : 'snippy-msg';
-  msgDiv.innerHTML = `<strong>${role === 'user' ? 'You' : 'Snippy ✂️'}:</strong> ${formatText(text)}`;
+  msgDiv.innerHTML = `<strong>${role === 'user' ? 'You' : 'Snippy ⚡'}:</strong> ${formatText(text)}`;
   chatBox.appendChild(msgDiv);
   chatBox.scrollTop = chatBox.scrollHeight;
 }
@@ -87,7 +117,7 @@ function executeSnippyActions(response) {
   while ((match = codeBlockRegex.exec(response)) !== null) {
     const jsCode = match[1];
     try {
-      console.log("⚡ Snippy Executing JS:", jsCode);
+      console.log("⚡ Snippy Executing JS Snippet:", jsCode);
       const runner = new Function('Snippy', jsCode);
       runner(window.Snippy);
     } catch (e) {
@@ -95,7 +125,7 @@ function executeSnippyActions(response) {
     }
   }
 
-  // Pattern 2: Direct Snippy.<method>(...) lines if not inside code block
+  // Pattern 2: Direct Snippy.executeTool(...) lines if not inside code block
   if (!response.includes('```js')) {
     const directLineRegex = /(Snippy\.[a-zA-Z0-9_]+\([^)]*\));?/g;
     while ((match = directLineRegex.exec(response)) !== null) {
@@ -112,19 +142,19 @@ function executeSnippyActions(response) {
 }
 
 // ==========================================
-// LITERT INITIALIZATION & GENERATION
+// INITIALIZATION
 // ==========================================
 async function initLiteRT() {
   try {
     statusBadge.textContent = "Loading WASM Runtime...";
     await loadLiteRt('/wasm/');
 
-    statusBadge.textContent = "Snippy Ready (LiteRT Engine)";
+    statusBadge.textContent = "Snippy Ready (WebGPU)";
     statusBadge.className = "status-badge ready";
 
     promptInput.disabled = false;
     sendBtn.disabled = false;
-    chatBox.innerHTML = '<div class="welcome-msg">✂️ Snippy model loaded and ready! Try asking Snippy to change the background color or create a button.</div>';
+    chatBox.innerHTML = '<div class="welcome-msg">⚡ Snippy agent initialized! Try asking Snippy to perform an action on this webpage.</div>';
   } catch (err) {
     console.error("Initialization Error:", err);
     statusBadge.textContent = "Error Loading Engine";
@@ -147,7 +177,7 @@ promptForm.addEventListener('submit', async (e) => {
     const res = await fetch('/api/generate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt: `Snippy, ${promptText}` })
+      body: JSON.stringify({ prompt: promptText })
     });
 
     const data = await res.json();

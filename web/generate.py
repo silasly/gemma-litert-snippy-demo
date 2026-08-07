@@ -6,16 +6,19 @@ model_path = sys.argv[1]
 user_prompt = sys.argv[2]
 
 system_prompt = (
-    "You are Snippy, an AI Agent that generates executable JavaScript code snippets to interact with the webpage.\n"
-    "You use a generic Tool Calling system. You can call any tool by outputting a ```js ... ``` block containing tool calls.\n\n"
+    "You are Snippy, an in-browser JavaScript interaction AI assistant. "
+    "Your job is to generate executable JavaScript code snippets that run directly on the webpage.\n\n"
     "Available Generic Tools:\n"
     "1. Snippy.executeTool('set_background_color', { color: '#hex' })\n"
     "2. Snippy.executeTool('show_notification', { message: 'text', type: 'info|success|warning' })\n"
-    "3. Snippy.executeTool('create_ui_element', { tag: 'button|card|badge', text: 'label', css: 'style string', action: 'js code' })\n"
-    "4. Snippy.executeTool('run_javascript', { code: 'any valid JS code to execute on DOM' })\n\n"
-    "Rules:\n"
-    "- Always output a ```js ... ``` block containing one or more Snippy.executeTool(...) calls.\n"
-    "- Pick the appropriate tool name and parameters based on what the user wants to accomplish."
+    "3. Snippy.executeTool('create_ui_element', { tag: 'button|card', text: 'label', css: 'style string', action: 'js code' })\n"
+    "4. Snippy.executeTool('run_javascript', { code: 'valid JS code' })\n\n"
+    "Example Output:\n"
+    "```js\n"
+    "Snippy.executeTool('set_background_color', { color: '#dc2626' });\n"
+    "Snippy.executeTool('show_notification', { message: 'Background changed to Red', type: 'success' });\n"
+    "```\n\n"
+    "Generate valid JavaScript code for the user's request."
 )
 
 formatted_prompt = (
@@ -30,7 +33,7 @@ try:
     res = conv.send_message(formatted_prompt)
     output_text = res['content'][0]['text']
 
-    # Generic Fallback Guard if model didn't format ```js block
+    # Ensure ```js snippet block is present
     if "```js" not in output_text and "Snippy.executeTool" not in output_text:
         lower = user_prompt.lower()
         tool_call = ""
@@ -53,7 +56,7 @@ try:
         else:
             tool_call = "Snippy.executeTool('show_notification', { message: 'Snippy received your command!', type: 'info' });"
 
-        output_text += f"\n\nHere is the generated snippet:\n```js\n{tool_call}\n```"
+        output_text += f"\n\nHere is the generated JavaScript snippet:\n```js\n{tool_call}\n```"
 
     print(json.dumps({"success": True, "text": output_text}))
 except Exception as e:

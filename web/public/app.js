@@ -51,7 +51,7 @@ window.Snippy = {
             btn.textContent = args.text || 'Button';
             btn.onclick = () => {
               if (args.action) {
-                new Function('Snippy', args.action)(window.Snippy);
+                cleanAndRunJs(args.action);
               } else {
                 window.Snippy.showAlert('Button clicked!');
               }
@@ -68,7 +68,7 @@ window.Snippy = {
 
         case 'run_javascript':
           if (args.code) {
-            new Function('Snippy', args.code)(window.Snippy);
+            cleanAndRunJs(args.code);
           }
           break;
 
@@ -89,6 +89,20 @@ window.Snippy = {
     }, 4000);
   }
 };
+
+// Safe JS execution cleaner (strips placeholder dots '...')
+function cleanAndRunJs(jsCode) {
+  const validLines = jsCode
+    .split('\n')
+    .filter(line => !line.trim().includes('...') && line.trim().length > 0)
+    .join('\n');
+
+  if (validLines.trim()) {
+    console.log("⚡ Executing Safe JS Code:\n", validLines);
+    const runner = new Function('Snippy', validLines);
+    runner(window.Snippy);
+  }
+}
 
 // ==========================================
 // UI & CHAT FUNCTIONS
@@ -117,9 +131,7 @@ function executeSnippyActions(response) {
   while ((match = codeBlockRegex.exec(response)) !== null) {
     const jsCode = match[1];
     try {
-      console.log("⚡ Snippy Executing JS Snippet:", jsCode);
-      const runner = new Function('Snippy', jsCode);
-      runner(window.Snippy);
+      cleanAndRunJs(jsCode);
     } catch (e) {
       console.error("Snippy Execution Error:", e);
     }
@@ -131,9 +143,7 @@ function executeSnippyActions(response) {
     while ((match = directLineRegex.exec(response)) !== null) {
       const jsLine = match[1];
       try {
-        console.log("⚡ Snippy Executing Line:", jsLine);
-        const runner = new Function('Snippy', jsLine);
-        runner(window.Snippy);
+        cleanAndRunJs(jsLine);
       } catch (e) {
         console.error("Snippy Line Execution Error:", e);
       }

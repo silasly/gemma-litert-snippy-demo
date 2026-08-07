@@ -14,6 +14,34 @@ const toolCountBadge = document.getElementById('toolCountBadge');
 
 let totalToolCalls = 0;
 
+// Color Normalizer to handle CSS color strings, named colors, and invalid '#red' formats
+function normalizeColor(colorStr) {
+  if (!colorStr) return '#0f172a';
+  let c = colorStr.trim().toLowerCase();
+  
+  // Fix invalid '#red' or '#purple' format where '#' precedes a color name
+  if (c.startsWith('#') && !/^[0-9a-f]{3,8}$/i.test(c.slice(1))) {
+    c = c.slice(1);
+  }
+
+  const colorMap = {
+    'red': '#dc2626',
+    'dark red': '#7f1d1d',
+    'purple': '#581c87',
+    'dark purple': '#1e1b4b',
+    'blue': '#2563eb',
+    'ocean blue': '#1e3a8a',
+    'green': '#16a34a',
+    'emerald green': '#065f46',
+    'yellow': '#d97706',
+    'pink': '#db2777',
+    'dark': '#0f172a',
+    'black': '#020617'
+  };
+
+  return colorMap[c] || c;
+}
+
 // ==========================================
 // ⚡ SNIPPY GENERIC TOOL CALL DISPATCHER
 // ==========================================
@@ -35,7 +63,10 @@ window.Snippy = {
     try {
       switch (toolName) {
         case 'set_background_color':
-          pageBody.style.backgroundColor = args.color || '#0f172a';
+          const targetColor = normalizeColor(args.color);
+          console.log("⚡ Changing background color to:", targetColor);
+          pageBody.style.backgroundColor = targetColor;
+          document.documentElement.style.backgroundColor = targetColor;
           break;
 
         case 'show_notification':

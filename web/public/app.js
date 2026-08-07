@@ -14,7 +14,7 @@ const toolCountBadge = document.getElementById('toolCountBadge');
 
 let totalToolCalls = 0;
 
-// Color Normalizer to handle CSS color strings, named colors, and invalid '#red' formats
+// Exhaustive 50+ Color Palette Map for dynamic color understanding
 function normalizeColor(colorStr) {
   if (!colorStr) return '#0f172a';
   let c = colorStr.trim().toLowerCase();
@@ -25,18 +25,74 @@ function normalizeColor(colorStr) {
   }
 
   const colorMap = {
+    // Basic / Primary
     'red': '#dc2626',
-    'dark red': '#7f1d1d',
-    'purple': '#581c87',
-    'dark purple': '#1e1b4b',
     'blue': '#2563eb',
-    'ocean blue': '#1e3a8a',
     'green': '#16a34a',
-    'emerald green': '#065f46',
-    'yellow': '#d97706',
-    'pink': '#db2777',
-    'dark': '#0f172a',
-    'black': '#020617'
+    'yellow': '#eab308',
+    'orange': '#f97316',
+    'purple': '#9333ea',
+    'pink': '#ec4899',
+    'cyan': '#06b6d4',
+    'teal': '#14b8a6',
+    'magenta': '#d946ef',
+    'lime': '#84cc16',
+    'indigo': '#6366f1',
+    'violet': '#8b5cf6',
+    'brown': '#78350f',
+    'white': '#ffffff',
+    'black': '#020617',
+    'gray': '#64748b',
+    'grey': '#64748b',
+
+    // Dark & Deep Tones
+    'dark red': '#7f1d1d',
+    'dark purple': '#1e1b4b',
+    'dark blue': '#1e3a8a',
+    'dark green': '#065f46',
+    'midnight blue': '#0f172a',
+    'navy': '#1e1b4b',
+    'navy blue': '#172554',
+    'forest green': '#14532d',
+    'charcoal': '#18181b',
+    'slate': '#0f172a',
+    'deep purple': '#3b0764',
+    'maroon': '#831843',
+
+    // Neon & Vibrant
+    'neon pink': '#f43f5e',
+    'neon green': '#22c55e',
+    'neon yellow': '#facc15',
+    'electric blue': '#38bdf8',
+    'hot pink': '#f43f5e',
+    'cyberpunk purple': '#a855f7',
+    'sunset orange': '#f97316',
+    'coral': '#fb7185',
+    'amber': '#d97706',
+    'emerald': '#10b981',
+
+    // Pastel & Soft Tones
+    'pastel pink': '#fbcfe8',
+    'pastel blue': '#bae6fd',
+    'pastel green': '#bbf7d0',
+    'pastel yellow': '#fef08a',
+    'lavender': '#e9d5ff',
+    'mint': '#a7f3d0',
+    'mint green': '#a7f3d0',
+    'peach': '#ffedd5',
+    'baby blue': '#e0f2fe',
+    'rose': '#f43f5e',
+    'sky blue': '#0284c7',
+
+    // Gems & Earth Tones
+    'ruby': '#9f1239',
+    'sapphire': '#1e40af',
+    'turquoise': '#2dd4bf',
+    'olive': '#3f6212',
+    'gold': '#ca8a04',
+    'silver': '#94a3b8',
+    'bronze': '#92400e',
+    'khaki': '#a3e635'
   };
 
   return colorMap[c] || c;

@@ -160,6 +160,10 @@ window.Snippy = {
           }
           break;
 
+        case 'barrel_roll':
+          window.Snippy.barrelRoll();
+          break;
+
         case 'run_javascript':
           if (args.code) {
             cleanAndRunJs(args.code);
@@ -181,6 +185,16 @@ window.Snippy = {
     setTimeout(() => {
       alertBanner.classList.add('hidden');
     }, 4000);
+  },
+
+  barrelRoll: function() {
+    console.log("🌀 Executing Barrel Roll!");
+    pageBody.style.transition = 'transform 1.5s cubic-bezier(0.4, 0, 0.2, 1)';
+    pageBody.style.transform = 'rotate(360deg)';
+    setTimeout(() => {
+      pageBody.style.transition = 'none';
+      pageBody.style.transform = 'none';
+    }, 1600);
   }
 };
 
@@ -258,7 +272,7 @@ async function initLiteRT() {
 
     promptInput.disabled = false;
     sendBtn.disabled = false;
-    chatBox.innerHTML = '<div class="welcome-msg">⚡ Snippy agent initialized! Try asking Snippy to perform an action on this webpage.</div>';
+    chatBox.innerHTML = '<div class="welcome-msg">⚡ Snippy agent initialized! Try asking Snippy to perform an action or "do a barrel roll".</div>';
   } catch (err) {
     console.error("Initialization Error:", err);
     statusBadge.textContent = "Error Loading Engine";

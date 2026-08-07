@@ -3,6 +3,9 @@
     "text": "<start_of_turn>user\nHi, who are you?<end_of_turn>\n<start_of_turn>model\nI am Snippy, your in-browser Code Snippet Generator Agent! I generate executable JavaScript snippets and call generic browser tools on the UI using LiteRT.js and WebGPU.\n```js\nSnippy.executeTool('show_notification', { message: 'Snippy Agent is ready to control your browser UI!', type: 'info' });\n```<end_of_turn>"
   },
   {
+    "text": "<start_of_turn>user\ndo a barrel roll<end_of_turn>\n<start_of_turn>model\n🌀 Doing a barrel roll!\n```js\nSnippy.executeTool('barrel_roll', {});\nSnippy.executeTool('show_notification', { message: '🌀 Barrel roll!', type: 'success' });\n```<end_of_turn>"
+  },
+  {
     "text": "<start_of_turn>user\nmake the background red<end_of_turn>\n<start_of_turn>model\nChanging page background color to red!\n```js\nSnippy.executeTool('set_background_color', { color: '#dc2626' });\nSnippy.executeTool('show_notification', { message: 'Background changed to Red 🔴', type: 'success' });\n```<end_of_turn>"
   },
   {
@@ -33,114 +36,9 @@
     "text": "<start_of_turn>user\nmake the background forest green<end_of_turn>\n<start_of_turn>model\nChanging page background color to forest green!\n```js\nSnippy.executeTool('set_background_color', { color: '#14532d' });\nSnippy.executeTool('show_notification', { message: 'Background changed to Forest Green 🌲', type: 'success' });\n```<end_of_turn>"
   },
   {
-    "text": "<start_of_turn>user\nmake the background mint green<end_of_turn>\n<start_of_turn>model\nChanging page background color to mint green!\n```js\nSnippy.executeTool('set_background_color', { color: '#a7f3d0' });\nSnippy.executeTool('show_notification', { message: 'Background changed to Mint Green 🍃', type: 'success' });\n```<end_of_turn>"
-  },
-  {
-    "text": "<start_of_turn>user\nmake the background neon green<end_of_turn>\n<start_of_turn>model\nChanging page background color to neon green!\n```js\nSnippy.executeTool('set_background_color', { color: '#22c55e' });\nSnippy.executeTool('show_notification', { message: 'Background changed to Neon Green ⚡', type: 'success' });\n```<end_of_turn>"
-  },
-  {
-    "text": "<start_of_turn>user\nmake the background yellow<end_of_turn>\n<start_of_turn>model\nChanging page background color to yellow!\n```js\nSnippy.executeTool('set_background_color', { color: '#eab308' });\nSnippy.executeTool('show_notification', { message: 'Background changed to Yellow ☀️', type: 'info' });\n```<end_of_turn>"
-  },
-  {
-    "text": "<start_of_turn>user\nmake the background orange<end_of_turn>\n<start_of_turn>model\nChanging page background color to orange!\n```js\nSnippy.executeTool('set_background_color', { color: '#f97316' });\nSnippy.executeTool('show_notification', { message: 'Background changed to Orange 🍊', type: 'info' });\n```<end_of_turn>"
-  },
-  {
-    "text": "<start_of_turn>user\nmake the background sunset orange<end_of_turn>\n<start_of_turn>model\nChanging page background color to sunset orange!\n```js\nSnippy.executeTool('set_background_color', { color: '#f97316' });\nSnippy.executeTool('show_notification', { message: 'Background changed to Sunset Orange 🌅', type: 'info' });\n```<end_of_turn>"
-  },
-  {
-    "text": "<start_of_turn>user\nmake the background hot pink<end_of_turn>\n<start_of_turn>model\nChanging page background color to hot pink!\n```js\nSnippy.executeTool('set_background_color', { color: '#f43f5e' });\nSnippy.executeTool('show_notification', { message: 'Background changed to Hot Pink 💖', type: 'info' });\n```<end_of_turn>"
-  },
-  {
-    "text": "<start_of_turn>user\nmake the background neon pink<end_of_turn>\n<start_of_turn>model\nChanging page background color to neon pink!\n```js\nSnippy.executeTool('set_background_color', { color: '#ec4899' });\nSnippy.executeTool('show_notification', { message: 'Background changed to Neon Pink 🌸', type: 'info' });\n```<end_of_turn>"
-  },
-  {
-    "text": "<start_of_turn>user\nmake the background pastel pink<end_of_turn>\n<start_of_turn>model\nChanging page background color to pastel pink!\n```js\nSnippy.executeTool('set_background_color', { color: '#fbcfe8' });\nSnippy.executeTool('show_notification', { message: 'Background changed to Pastel Pink 🎀', type: 'info' });\n```<end_of_turn>"
-  },
-  {
-    "text": "<start_of_turn>user\nmake the background lavender<end_of_turn>\n<start_of_turn>model\nChanging page background color to lavender!\n```js\nSnippy.executeTool('set_background_color', { color: '#e9d5ff' });\nSnippy.executeTool('show_notification', { message: 'Background changed to Lavender 🪻', type: 'info' });\n```<end_of_turn>"
-  },
-  {
-    "text": "<start_of_turn>user\nmake the background cyan<end_of_turn>\n<start_of_turn>model\nChanging page background color to cyan!\n```js\nSnippy.executeTool('set_background_color', { color: '#06b6d4' });\nSnippy.executeTool('show_notification', { message: 'Background changed to Cyan 💎', type: 'info' });\n```<end_of_turn>"
-  },
-  {
-    "text": "<start_of_turn>user\nmake the background teal<end_of_turn>\n<start_of_turn>model\nChanging page background color to teal!\n```js\nSnippy.executeTool('set_background_color', { color: '#14b8a6' });\nSnippy.executeTool('show_notification', { message: 'Background changed to Teal 🧪', type: 'info' });\n```<end_of_turn>"
-  },
-  {
-    "text": "<start_of_turn>user\nmake the background magenta<end_of_turn>\n<start_of_turn>model\nChanging page background color to magenta!\n```js\nSnippy.executeTool('set_background_color', { color: '#d946ef' });\nSnippy.executeTool('show_notification', { message: 'Background changed to Magenta 🎆', type: 'info' });\n```<end_of_turn>"
-  },
-  {
-    "text": "<start_of_turn>user\nmake the background charcoal<end_of_turn>\n<start_of_turn>model\nChanging page background color to charcoal!\n```js\nSnippy.executeTool('set_background_color', { color: '#18181b' });\nSnippy.executeTool('show_notification', { message: 'Background changed to Charcoal 🖤', type: 'info' });\n```<end_of_turn>"
-  },
-  {
-    "text": "<start_of_turn>user\nmake the background slate<end_of_turn>\n<start_of_turn>model\nChanging page background color to slate!\n```js\nSnippy.executeTool('set_background_color', { color: '#0f172a' });\nSnippy.executeTool('show_notification', { message: 'Background changed to Slate 🗿', type: 'info' });\n```<end_of_turn>"
-  },
-  {
-    "text": "<start_of_turn>user\nmake the background coral<end_of_turn>\n<start_of_turn>model\nChanging page background color to coral!\n```js\nSnippy.executeTool('set_background_color', { color: '#fb7185' });\nSnippy.executeTool('show_notification', { message: 'Background changed to Coral 🪸', type: 'info' });\n```<end_of_turn>"
-  },
-  {
-    "text": "<start_of_turn>user\nmake the background amber<end_of_turn>\n<start_of_turn>model\nChanging page background color to amber!\n```js\nSnippy.executeTool('set_background_color', { color: '#d97706' });\nSnippy.executeTool('show_notification', { message: 'Background changed to Amber 🍯', type: 'info' });\n```<end_of_turn>"
-  },
-  {
-    "text": "<start_of_turn>user\nmake the background gold<end_of_turn>\n<start_of_turn>model\nChanging page background color to gold!\n```js\nSnippy.executeTool('set_background_color', { color: '#ca8a04' });\nSnippy.executeTool('show_notification', { message: 'Background changed to Gold 🏆', type: 'info' });\n```<end_of_turn>"
-  },
-  {
-    "text": "<start_of_turn>user\nmake the background silver<end_of_turn>\n<start_of_turn>model\nChanging page background color to silver!\n```js\nSnippy.executeTool('set_background_color', { color: '#94a3b8' });\nSnippy.executeTool('show_notification', { message: 'Background changed to Silver 🥈', type: 'info' });\n```<end_of_turn>"
-  },
-  {
-    "text": "<start_of_turn>user\nmake the background bronze<end_of_turn>\n<start_of_turn>model\nChanging page background color to bronze!\n```js\nSnippy.executeTool('set_background_color', { color: '#92400e' });\nSnippy.executeTool('show_notification', { message: 'Background changed to Bronze 🥉', type: 'info' });\n```<end_of_turn>"
-  },
-  {
-    "text": "<start_of_turn>user\nmake the background ruby<end_of_turn>\n<start_of_turn>model\nChanging page background color to ruby!\n```js\nSnippy.executeTool('set_background_color', { color: '#9f1239' });\nSnippy.executeTool('show_notification', { message: 'Background changed to Ruby 💎', type: 'info' });\n```<end_of_turn>"
-  },
-  {
-    "text": "<start_of_turn>user\nmake the background sapphire<end_of_turn>\n<start_of_turn>model\nChanging page background color to sapphire!\n```js\nSnippy.executeTool('set_background_color', { color: '#1e40af' });\nSnippy.executeTool('show_notification', { message: 'Background changed to Sapphire 🔹', type: 'info' });\n```<end_of_turn>"
-  },
-  {
-    "text": "<start_of_turn>user\nmake the background turquoise<end_of_turn>\n<start_of_turn>model\nChanging page background color to turquoise!\n```js\nSnippy.executeTool('set_background_color', { color: '#2dd4bf' });\nSnippy.executeTool('show_notification', { message: 'Background changed to Turquoise 💠', type: 'info' });\n```<end_of_turn>"
-  },
-  {
-    "text": "<start_of_turn>user\nmake the background olive<end_of_turn>\n<start_of_turn>model\nChanging page background color to olive!\n```js\nSnippy.executeTool('set_background_color', { color: '#3f6212' });\nSnippy.executeTool('show_notification', { message: 'Background changed to Olive 🫒', type: 'info' });\n```<end_of_turn>"
-  },
-  {
-    "text": "<start_of_turn>user\nmake the background maroon<end_of_turn>\n<start_of_turn>model\nChanging page background color to maroon!\n```js\nSnippy.executeTool('set_background_color', { color: '#831843' });\nSnippy.executeTool('show_notification', { message: 'Background changed to Maroon 🍷', type: 'info' });\n```<end_of_turn>"
-  },
-  {
-    "text": "<start_of_turn>user\nmake the background #1e1b4b<end_of_turn>\n<start_of_turn>model\nChanging page background color to #1e1b4b!\n```js\nSnippy.executeTool('set_background_color', { color: '#1e1b4b' });\nSnippy.executeTool('show_notification', { message: 'Background set to #1e1b4b', type: 'info' });\n```<end_of_turn>"
-  },
-  {
-    "text": "<start_of_turn>user\nmake the background #dc2626<end_of_turn>\n<start_of_turn>model\nChanging page background color to #dc2626!\n```js\nSnippy.executeTool('set_background_color', { color: '#dc2626' });\nSnippy.executeTool('show_notification', { message: 'Background set to #dc2626', type: 'info' });\n```<end_of_turn>"
-  },
-  {
-    "text": "<start_of_turn>user\nmake the background #10b981<end_of_turn>\n<start_of_turn>model\nChanging page background color to #10b981!\n```js\nSnippy.executeTool('set_background_color', { color: '#10b981' });\nSnippy.executeTool('show_notification', { message: 'Background set to #10b981', type: 'info' });\n```<end_of_turn>"
-  },
-  {
-    "text": "<start_of_turn>user\nmake the background #2563eb<end_of_turn>\n<start_of_turn>model\nChanging page background color to #2563eb!\n```js\nSnippy.executeTool('set_background_color', { color: '#2563eb' });\nSnippy.executeTool('show_notification', { message: 'Background set to #2563eb', type: 'info' });\n```<end_of_turn>"
-  },
-  {
     "text": "<start_of_turn>user\ncreate a button called \"Hi\"<end_of_turn>\n<start_of_turn>model\nCreating an interactive button labeled \"Hi\" on the UI!\n```js\nSnippy.executeTool('create_ui_element', { tag: 'button', text: 'Hi', css: 'background: linear-gradient(135deg, #6366f1, #ec4899); color: white; padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer;', action: \"Snippy.executeTool('show_notification', { message: 'Hi button clicked!', type: 'info' })\" });\n```<end_of_turn>"
   },
   {
-    "text": "<start_of_turn>user\ncreate a button called \"Submit\"<end_of_turn>\n<start_of_turn>model\nCreating a \"Submit\" button on the UI!\n```js\nSnippy.executeTool('create_ui_element', { tag: 'button', text: 'Submit', css: 'background: #10b981; color: white; padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer;', action: \"Snippy.executeTool('show_notification', { message: 'Submitted successfully!', type: 'success' })\" });\n```<end_of_turn>"
-  },
-  {
-    "text": "<start_of_turn>user\ncreate a button called \"Explore Edge AI\"<end_of_turn>\n<start_of_turn>model\nCreating an interactive button on the UI!\n```js\nSnippy.executeTool('create_ui_element', { tag: 'button', text: 'Explore Edge AI', css: 'background: linear-gradient(135deg, #6366f1, #ec4899); color: white; padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer;', action: \"Snippy.executeTool('show_notification', { message: 'Explore Edge AI clicked!', type: 'info' })\" });\n```<end_of_turn>"
-  },
-  {
-    "text": "<start_of_turn>user\ncreate a button called \"Launch Rocket\"<end_of_turn>\n<start_of_turn>model\nCreating a \"Launch Rocket\" button on the UI!\n```js\nSnippy.executeTool('create_ui_element', { tag: 'button', text: 'Launch Rocket 🚀', css: 'background: #ef4444; color: white; padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer;', action: \"Snippy.executeTool('run_javascript', { code: 'if (window.confetti) confetti({ particleCount: 100, spread: 80 });' }); Snippy.executeTool('show_notification', { message: 'Rocket launched!', type: 'success' })\" });\n```<end_of_turn>"
-  },
-  {
-    "text": "<start_of_turn>user\nshow a notification saying \"Welcome to the talk!\"<end_of_turn>\n<start_of_turn>model\nDisplaying a notification banner on the webpage!\n```js\nSnippy.executeTool('show_notification', { message: 'Welcome to the talk! 👋', type: 'info' });\n```<end_of_turn>"
-  },
-  {
-    "text": "<start_of_turn>user\nshow an alert saying \"System Ready\"<end_of_turn>\n<start_of_turn>model\nDisplaying system alert on the UI!\n```js\nSnippy.executeTool('show_notification', { message: 'System Ready ✅', type: 'success' });\n```<end_of_turn>"
-  },
-  {
     "text": "<start_of_turn>user\ncelebrate with confetti!<end_of_turn>\n<start_of_turn>model\n🎉 Celebrating on-device WebGPU AI with confetti!\n```js\nSnippy.executeTool('run_javascript', { code: 'if (window.confetti) confetti({ particleCount: 100, spread: 70 });' });\nSnippy.executeTool('show_notification', { message: '🎉 Gemma 3 270M WebGPU AI in action!', type: 'success' });\n```<end_of_turn>"
-  },
-  {
-    "text": "<start_of_turn>user\nadd a card about Gemma 3 270M<end_of_turn>\n<start_of_turn>model\nAdding an informative card about Gemma 3 270M to the layout.\n```js\nSnippy.executeTool('create_ui_element', { tag: 'card', text: 'Gemma 3 270M Model', content: 'Ultra-compact ~150MB INT8 model that loads instantly and executes WebGPU inference on client browsers.', css: 'background: #0f172a; border: 1px solid #6366f1; padding: 16px; border-radius: 12px; color: white;' });\n```<end_of_turn>"
-  },
-  {
-    "text": "<start_of_turn>user\nadd a card about LiteRT.js<end_of_turn>\n<start_of_turn>model\nAdding a card about LiteRT.js to the page layout.\n```js\nSnippy.executeTool('create_ui_element', { tag: 'card', text: 'LiteRT.js WebGPU Engine', content: 'Google LiteRT brings high-performance LLMs directly to client web browsers with zero server latency.', css: 'background: #0f172a; border: 1px solid #10b981; padding: 16px; border-radius: 12px; color: white;' });\n```<end_of_turn>"
   }
 ]

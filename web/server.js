@@ -15,7 +15,10 @@ app.use((req, res, next) => {
   next();
 });
 
-// Serve static assets
+// Silence favicon 404 warnings
+app.get('/favicon.ico', (req, res) => res.status(204).end());
+
+// Serve static assets and node_modules
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/node_modules', express.static(path.join(__dirname, 'node_modules')));
 app.use('/wasm', express.static(path.join(__dirname, 'node_modules/@litertjs/core/wasm')));
@@ -33,7 +36,6 @@ app.post('/api/generate', (req, res) => {
       return res.status(500).json({ success: false, error: error.message });
     }
     try {
-      // Find JSON line in stdout
       const lines = stdout.trim().split('\n');
       const jsonLine = lines.find(l => l.startsWith('{') && l.endsWith('}'));
       if (jsonLine) {

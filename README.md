@@ -1,5 +1,7 @@
 # ⚡ Snippy: Fine-Tuning Gemma 3 270M & Bringing Edge AI to the Browser with LiteRT.js
 
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/silasly/gemma-litert-snippy-demo/blob/main/Colab_Gemma_3_Snippy_LiteRT.ipynb)
+
 An end-to-end tutorial and demo for fine-tuning **Gemma 3 270M** as **Snippy** — an in-browser Code Snippet Generator and UI Tool Calling AI Agent. Snippy runs directly in client web browsers using **Google LiteRT.js** and **WebGPU**, generating executable JavaScript code snippets that manipulate the DOM in real time.
 
 ---
@@ -35,8 +37,8 @@ In this talk, we demonstrate how to fine-tune Gemma models using Google Colab an
 This repository includes two tailored notebook versions:
 
 1. **Google Colab Version (`Colab_Gemma_3_Snippy_LiteRT.ipynb`)**:
+   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/silasly/gemma-litert-snippy-demo/blob/main/Colab_Gemma_3_Snippy_LiteRT.ipynb)
    * Pre-configured for **Google Colab (T4 GPU / Python 3.12)**.
-   * Includes automatic `%pip install -q -U typing-extensions` to resolve Colab's Python 3.12 `cannot import name 'Sentinel' from 'typing_extensions'` error.
    * Auto-fetches `snippy_dataset.json` from GitHub and provides direct file downloads for `model.litertlm` and `model.tflite`.
 
 2. **Local Jupyter Version (`Gemma_FineTune_and_LiteRT_Export.ipynb`)**:
@@ -82,14 +84,12 @@ This repository includes two tailored notebook versions:
 
 ### Step 1: Environment Setup (Google Colab / Astral `uv`)
 
-In **Google Colab**, upgrade `typing-extensions` first to fix Python 3.12 imports:
+In **Google Colab**:
 
 ```bash
-# Fix Colab Python 3.12 Sentinel import error
-pip install -q -U typing-extensions
-
 # Install ML and LiteRT packages
-pip install -q torch transformers peft trl datasets litert-torch litert-lm
+pip install -q -U torch torchvision --index-url https://download.pytorch.org/whl/cu121
+pip install -q -U transformers peft datasets litert-torch litert-lm
 ```
 
 For **Local Setup (Astral `uv`)**:
@@ -107,14 +107,13 @@ uv pip install torch transformers peft trl datasets litert-torch litert-lm jupyt
 
 ### Step 2: Fine-Tuning Gemma 3 270M with PEFT / LoRA
 
-We load `unsloth/gemma-3-270m-it` and fine-tune it on `snippy_dataset.json` using Hugging Face `trl.SFTTrainer`.
+We load `unsloth/gemma-3-270m-it` and fine-tune it on `snippy_dataset.json` using Hugging Face `Trainer`.
 
 ```python
 import json
 import torch
-from transformers import AutoTokenizer, AutoModelForCausalLM
+from transformers import AutoTokenizer, AutoModelForCausalLM, Trainer, TrainingArguments, DataCollatorForLanguageModeling
 from peft import LoraConfig, get_peft_model
-from trl import SFTTrainer, SFTConfig
 from datasets import Dataset
 
 MODEL_ID = "unsloth/gemma-3-270m-it"
@@ -146,21 +145,29 @@ with open('snippy_dataset.json', 'r') as f:
 
 dataset = Dataset.from_list(sample_data)
 
-# 4. Configure SFTTrainer
-sft_config = SFTConfig(
-    dataset_text_field="text",
-    max_length=256,
+def tokenize_fn(examples):
+    return tokenizer(examples['text'], truncation=True, max_length=256)
+
+tokenized_dataset = dataset.map(tokenize_fn, batched=True, remove_columns=['text'])
+
+# 4. Configure Trainer
+training_args = TrainingArguments(
     output_dir="./results",
-    num_train_epochs=5,
     per_device_train_batch_size=2,
+    gradient_accumulation_steps=4,
+    num_train_epochs=5,
+    learning_rate=2e-4,
     logging_steps=1,
-    loss_type="nll"
+    fp16=torch.cuda.is_available(),
+    optim="adamw_torch",
+    report_to="none"
 )
 
-trainer = SFTTrainer(
+trainer = Trainer(
     model=peft_model,
-    train_dataset=dataset,
-    args=sft_config
+    train_dataset=tokenized_dataset,
+    args=training_args,
+    data_collator=DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False)
 )
 trainer.train()
 
@@ -344,22 +351,18 @@ Snippy dispatches all browser actions via `Snippy.executeTool(toolName, args)`:
 
 ## ⚠️ Troubleshooting & Common Pitfalls
 
-1. **Colab Python 3.12 `Sentinel` Import Error:**
-   * *Issue:* `ImportError: cannot import name 'Sentinel' from 'typing_extensions'`.
-   * *Fix:* Run `pip install -q -U typing-extensions` before importing `trl` / `transformers` in Colab. Use `Colab_Gemma_3_Snippy_LiteRT.ipynb`.
-
-2. **Unmerged LoRA Folders:**
+1. **Unmerged LoRA Folders:**
    * *Issue:* `litert-torch` fails on PEFT adapter directories.
    * *Fix:* Always run `peft_model.merge_and_unload()` first.
 
-3. **Browser Cross-Origin Isolation (`COOP` / `COEP`):**
+2. **Browser Cross-Origin Isolation (`COOP` / `COEP`):**
    * *Issue:* LiteRT.js WASM multithreading fails to allocate SharedArrayBuffers.
    * *Fix:* Access the app via `http://localhost:8080` and ensure `Cross-Origin-Opener-Policy: same-origin` and `Cross-Origin-Embedder-Policy: require-corp` headers are set in `server.js`.
 
-4. **Bare ES Module Resolution Error:**
+3. **Bare ES Module Resolution Error:**
    * *Issue:* `Failed to resolve module specifier "@litertjs/wasm-utils"`.
    * *Fix:* Include the `<script type="importmap">` block in `index.html`.
 
-5. **V8 ArrayBuffer 2GB Buffer Limit (`source array is too long`):**
+4. **V8 ArrayBuffer 2GB Buffer Limit (`source array is too long`):**
    * *Issue:* Loading unquantized 2B models (> 2 GB) causes V8 TypedArray buffer allocation crashes.
    * *Fix:* Use **Gemma 3 270M** or INT8 dynamic quantization (`-q dynamic_int8`), keeping model size under ~300 MB.

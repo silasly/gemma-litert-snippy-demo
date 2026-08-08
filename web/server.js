@@ -36,10 +36,31 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/node_modules', express.static(path.join(__dirname, 'node_modules')));
 app.use('/wasm', express.static(path.join(__dirname, 'node_modules/@litertjs/core/wasm')));
 
+// Dynamic Python executable detection (portable across any machine/environment)
+const getPythonExecutable = () => {
+  if (process.env.PYTHON) return process.env.PYTHON;
+  if (process.env.PYTHON_PATH) return process.env.PYTHON_PATH;
+  
+  // Test local system python paths
+  const candidatePaths = [
+    '/Users/xprilion/.local/share/uv/tools/jupyterlab/bin/python',
+    path.join(__dirname, '..', '.venv', 'bin', 'python'),
+    'python3',
+    'python'
+  ];
+
+  for (const candidate of candidatePaths) {
+    if (candidate.startsWith('/') && fs.existsSync(candidate)) {
+      return candidate;
+    }
+  }
+  return 'python3';
+};
+
 // LiteRT Generation Endpoint
 app.post('/api/generate', (req, res) => {
   const prompt = req.body.prompt || '';
-  const pythonPath = '/Users/xprilion/.local/share/uv/tools/jupyterlab/bin/python';
+  const pythonPath = getPythonExecutable();
   const scriptPath = path.join(__dirname, 'generate.py');
   const modelPath = path.join(__dirname, '..', 'litert_output', 'model.litertlm');
 
